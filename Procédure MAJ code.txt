@@ -1,0 +1,10 @@
+Changer le code dans App.jsx et enregistrer
+
+ouvrir PowerShell
+
+taper C:\Users\jdupuy.BRETTES\Documents\Arrosage>
+
+git status
+git add .
+git commit -m "Mise à jour appli Brettes arrosage"
+git push origin main

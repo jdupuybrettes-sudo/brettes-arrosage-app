@@ -759,6 +759,28 @@ export default function BrettesArrosageAppPrototype() {
     pushHistory(`Chargement du projet ${project.name}`);
   };
 
+  const renameSavedProject = (id) => {
+    const project = savedProjects.find((item) => item.id === id);
+    if (!project) return;
+    const nextName = window.prompt("Nouveau nom du projet", project.name);
+    if (!nextName || !nextName.trim()) return;
+    const next = savedProjects.map((item) => (item.id === id ? { ...item, name: nextName.trim(), payload: { ...item.payload, chantier: { ...item.payload.chantier, nom: nextName.trim() } } } : item));
+    setSavedProjects(next);
+    window.localStorage.setItem("brettes-arrosage-projects", JSON.stringify(next));
+    pushHistory(`Renommage du projet ${project.name} en ${nextName.trim()}`);
+  };
+
+  const deleteSavedProject = (id) => {
+    const project = savedProjects.find((item) => item.id === id);
+    if (!project) return;
+    const confirmed = window.confirm(`Supprimer le projet enregistré \"${project.name}\" ?`);
+    if (!confirmed) return;
+    const next = savedProjects.filter((item) => item.id !== id);
+    setSavedProjects(next);
+    window.localStorage.setItem("brettes-arrosage-projects", JSON.stringify(next));
+    pushHistory(`Suppression du projet enregistré ${project.name}`);
+  };
+
   const exportProjectJson = () => {
     downloadBlob(JSON.stringify(buildProjectPayload(), null, 2), `${(chantier.nom || "projet-arrosage").replace(/[^a-zA-Z0-9-_]+/g, "_")}.json`, "application/json");
     pushHistory("Export JSON du projet");
@@ -887,8 +909,20 @@ export default function BrettesArrosageAppPrototype() {
 
           {savedProjects.length > 0 && (
             <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 no-print">
-              <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900"><FolderOpen className="h-4 w-4" />Projets enregistrés</div>
-              <div className="flex flex-wrap gap-2">{savedProjects.map((project) => <button key={project.id} onClick={() => loadProject(project.id)} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">{project.name}</button>)}</div>
+              <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-900"><FolderOpen className="h-4 w-4" />Projets enregistrés</div>
+              <div className="mb-4 text-xs text-slate-500">Sauvegarde locale sur ce navigateur et ce poste.</div>
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {savedProjects.map((project) => (
+                  <div key={project.id} className="rounded-2xl border border-slate-200 bg-white p-3">
+                    <div className="text-sm font-semibold text-slate-900">{project.name}</div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <button onClick={() => loadProject(project.id)} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50">Ouvrir</button>
+                      <button onClick={() => renameSavedProject(project.id)} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50">Renommer</button>
+                      <button onClick={() => deleteSavedProject(project.id)} className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-medium text-rose-700 hover:bg-rose-100">Supprimer</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
