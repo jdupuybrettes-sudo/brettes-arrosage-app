@@ -1,10 +1,53 @@
-Changer le code dans App.jsx et enregistrer
+1. Changer le code dans App.jsx et enregistrer
 
-ouvrir PowerShell
+Ouvrez PowerShell puis allez dans le dossier du projet :
 
-taper C:\Users\jdupuy.BRETTES\Documents\Arrosage>
+cd "C:\Users\jdupuy.BRETTES\Documents\Arrosage"
 
+2. Vérifier où vous en êtes
+
+Tapez :
+
+git status
+
+Vous aurez 3 cas possibles.
+
+Cas A — App.jsx est modifié mais pas encore commité
+
+Vous verrez un truc du style modified: src/App.jsx
+
+Dans ce cas :
+
+git add .
+git commit -m "Mise à jour appli Brettes arrosage"
+git push origin main
+
+entrer
+
+OU
+
+Procédure complète simple à retenir
+
+À chaque fois que vous rouvrez PowerShell :
+
+cd "C:\Users\jdupuy.BRETTES\Documents\Arrosage"
 git status
 git add .
 git commit -m "Mise à jour appli Brettes arrosage"
 git push origin main
+
+Si Git vous dit qu’il n’y a rien à commit, ce n’est pas grave.
+Dans ce cas, faites juste :
+
+git push origin main
+Pour vérifier que c’est bien parti
+
+À la fin, retapez :
+
+git status
+
+Si tout est bon, vous devez avoir quelque chose comme :
+
+On branch main
+Your branch is up to date with 'origin/main'.
+nothing to commit, working tree clean
